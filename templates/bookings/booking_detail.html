@@ -1,0 +1,302 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Booking {{ booking.booking_id }} - Travel Booking System{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Booking Header -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-{% if booking.status == 'confirmed' %}success{% elif booking.status == 'cancelled' %}danger{% else %}warning{% endif %} text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="fas fa-ticket-alt"></i> Booking Details
+                        </h4>
+                        <span class="badge bg-light text-dark fs-6">{{ booking.get_status_display }}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-hashtag"></i> Booking Information</h6>
+                            <ul class="list-unstyled">
+                                <li><strong>Booking ID:</strong> {{ booking.booking_id }}</li>
+                                <li><strong>Booking Date:</strong> {{ booking.booking_date|date:"F d, Y \a\t g:i A" }}</li>
+                                <li><strong>Status:</strong> 
+                                    <span class="badge bg-{% if booking.status == 'confirmed' %}success{% elif booking.status == 'cancelled' %}danger{% else %}warning{% endif %}">
+                                        {{ booking.get_status_display }}
+                                    </span>
+                                </li>
+                                <li><strong>Number of Seats:</strong> {{ booking.number_of_seats }}</li>
+                                <li><strong>Total Amount:</strong> <span class="text-success fw-bold">${{ booking.total_price }}</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-user"></i> Passenger Information</h6>
+                            <ul class="list-unstyled">
+                                <li><strong>Name:</strong> {{ booking.passenger_name }}</li>
+                                <li><strong>Email:</strong> {{ booking.passenger_email }}</li>
+                                <li><strong>Phone:</strong> {{ booking.passenger_phone }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Travel Details -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-{% if booking.travel_option.travel_type == 'flight' %}plane{% elif booking.travel_option.travel_type == 'train' %}train{% else %}bus{% endif %}"></i>
+                        Travel Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-5">
+                            <div class="text-center p-3 border rounded bg-light">
+                                <h4 class="fw-bold">{{ booking.travel_option.source }}</h4>
+                                <p class="mb-1">{{ booking.travel_option.departure_date|date:"F d, Y" }}</p>
+                                <h5 class="text-primary">{{ booking.travel_option.departure_time }}</h5>
+                                <small class="text-muted">Departure</small>
+                            </div>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-center justify-content-center">
+                            <div class="text-center">
+                                <i class="fas fa-arrow-right fa-2x text-muted"></i>
+                                <div class="mt-2">
+                                    <small class="text-muted">{{ booking.travel_option.get_duration }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="text-center p-3 border rounded bg-light">
+                                <h4 class="fw-bold">{{ booking.travel_option.destination }}</h4>
+                                <p class="mb-1">{{ booking.travel_option.arrival_date|date:"F d, Y" }}</p>
+                                <h5 class="text-primary">{{ booking.travel_option.arrival_time }}</h5>
+                                <small class="text-muted">Arrival</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Travel Information</h6>
+                            <ul class="list-unstyled">
+                                <li><strong>Travel ID:</strong> {{ booking.travel_option.travel_id }}</li>
+                                <li><strong>Type:</strong> {{ booking.travel_option.get_travel_type_display }}</li>
+                                <li><strong>Price per seat:</strong> ${{ booking.travel_option.price }}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Important Notes</h6>
+                            <ul class="small">
+                                <li>Arrive 30 minutes before departure</li>
+                                <li>Carry valid ID proof</li>
+                                <li>Check weather conditions before travel</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-cogs"></i> Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2">
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary w-100" onclick="window.print()">
+                                <i class="fas fa-print"></i> Print Ticket
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-info w-100" onclick="downloadTicket()">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-secondary w-100" onclick="shareBooking()">
+                                <i class="fas fa-share"></i> Share
+                            </button>
+                        </div>
+                        {% if booking.can_cancel %}
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-danger w-100" onclick="confirmCancel()">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <hr class="my-3">
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'bookings:dashboard' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </a>
+                        <a href="{% url 'bookings:search_results' %}" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Book Another Travel
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Timeline -->
+            {% if booking.status == 'confirmed' %}
+            <div class="card shadow-sm mt-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="fas fa-history"></i> Booking Timeline</h6>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-success"></div>
+                            <div class="timeline-content">
+                                <h6 class="timeline-title">Booking Confirmed</h6>
+                                <p class="timeline-text">{{ booking.booking_date|date:"F d, Y \a\t g:i A" }}</p>
+                            </div>
+                        </div>
+                        {% if booking.travel_option.departure_date > today %}
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <h6 class="timeline-title">Upcoming Travel</h6>
+                                <p class="timeline-text">{{ booking.travel_option.departure_date|date:"F d, Y" }}</p>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-info"></div>
+                            <div class="timeline-content">
+                                <h6 class="timeline-title">Travel Completed</h6>
+                                <p class="timeline-text">{{ booking.travel_option.departure_date|date:"F d, Y" }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Booking Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelModalLabel">Cancel Booking</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Warning:</strong> This action cannot be undone.
+                </div>
+                <p>Are you sure you want to cancel this booking?</p>
+                <ul class="small">
+                    <li>Booking ID: <strong>{{ booking.booking_id }}</strong></li>
+                    <li>Travel: <strong>{{ booking.travel_option.source }} → {{ booking.travel_option.destination }}</strong></li>
+                    <li>Date: <strong>{{ booking.travel_option.departure_date }}</strong></li>
+                    <li>Amount: <strong>${{ booking.total_price }}</strong></li>
+                </ul>
+                <p><strong>Note:</strong> Refund will be processed within 5-7 business days.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Keep Booking</button>
+                <form method="post" action="{% url 'bookings:cancel_booking' booking.booking_id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-times"></i> Cancel Booking
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -35px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.timeline-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: -29px;
+    top: 17px;
+    width: 2px;
+    height: calc(100% + 8px);
+    background-color: #dee2e6;
+}
+
+.timeline-title {
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.timeline-text {
+    margin-bottom: 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+@media print {
+    .card-header, .btn, .modal {
+        display: none !important;
+    }
+    .card {
+        border: none !important;
+        box-shadow: none !important;
+    }
+}
+</style>
+
+<script>
+function confirmCancel() {
+    const modal = new bootstrap.Modal(document.getElementById('cancelModal'));
+    modal.show();
+}
+
+function downloadTicket() {
+    // In a real application, this would generate and download a PDF ticket
+    alert('Download functionality would be implemented here. For now, you can use the print option.');
+}
+
+function shareBooking() {
+    if (navigator.share) {
+        navigator.share({
+            title: 'My Travel Booking',
+            text: 'Check out my travel booking on TravelBooker',
+            url: window.location.href
+        });
+    } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(window.location.href).then(function() {
+            alert('Booking link copied to clipboard!');
+        });
+    }
+}
+</script>
+{% endblock %}

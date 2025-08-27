@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelEase - Book Your Next Adventure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    popover: {
+                        DEFAULT: "var(--popover)",
+                        foreground: "var(--popover-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    destructive: {
+                        DEFAULT: "var(--destructive)",
+                        foreground: "var(--destructive-foreground)",
+                    },
+                    border: "var(--border)",
+                    input: "var(--input)",
+                    ring: "var(--ring)",
+                },
+                fontFamily: {
+                    sans: ["var(--font-sans)"],
+                }
+            },
+        }
+    };
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: hsl(0 0% 100%);
+            --foreground: hsl(222.2 84% 4.9%);
+            --card: hsl(0 0% 100%);
+            --card-foreground: hsl(222.2 84% 4.9%);
+            --popover: hsl(0 0% 100%);
+            --popover-foreground: hsl(222.2 84% 4.9%);
+            --primary: hsl(221.2 83.2% 53.3%);
+            --primary-foreground: hsl(210 40% 98%);
+            --secondary: hsl(210 40% 96%);
+            --secondary-foreground: hsl(222.2 84% 4.9%);
+            --muted: hsl(210 40% 96%);
+            --muted-foreground: hsl(215.4 16.3% 46.9%);
+            --accent: hsl(210 40% 96%);
+            --accent-foreground: hsl(222.2 84% 4.9%);
+            --destructive: hsl(0 84.2% 60.2%);
+            --destructive-foreground: hsl(210 40% 98%);
+            --border: hsl(214.3 31.8% 91.4%);
+            --input: hsl(214.3 31.8% 91.4%);
+            --ring: hsl(221.2 83.2% 53.3%);
+            --radius: 0.5rem;
+            --font-sans: 'Inter', ui-sans-serif, system-ui;
+        }
+
+        .dark {
+            --background: hsl(222.2 84% 4.9%);
+            --foreground: hsl(210 40% 98%);
+            --card: hsl(222.2 84% 4.9%);
+            --card-foreground: hsl(210 40% 98%);
+            --popover: hsl(222.2 84% 4.9%);
+            --popover-foreground: hsl(210 40% 98%);
+            --primary: hsl(217.2 91.2% 59.8%);
+            --primary-foreground: hsl(222.2 84% 4.9%);
+            --secondary: hsl(217.2 32.6% 17.5%);
+            --secondary-foreground: hsl(210 40% 98%);
+            --muted: hsl(217.2 32.6% 17.5%);
+            --muted-foreground: hsl(215 20.2% 65.1%);
+            --accent: hsl(217.2 32.6% 17.5%);
+            --accent-foreground: hsl(210 40% 98%);
+            --destructive: hsl(0 62.8% 30.6%);
+            --destructive-foreground: hsl(210 40% 98%);
+            --border: hsl(217.2 32.6% 17.5%);
+            --input: hsl(217.2 32.6% 17.5%);
+            --ring: hsl(224.3 76.3% 94.1%);
+        }
+
+        body {
+            font-family: var(--font-sans);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, hsl(221.2 83.2% 53.3%) 0%, hsl(142.1 76.2% 36.3%) 100%);
+        }
+    </style>
+</head>
+
+<body class="bg-background text-foreground min-h-screen">
+    <!-- Navigation -->
+    <!-- @COMPONENT: Navigation [responsive navbar with user auth] -->
+    <nav class="bg-white shadow-sm border-b border-border sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-8">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-primary">
+                            <i class="fas fa-plane-departure mr-2"></i>TravelEase
+                        </h1>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-8">
+                            <a href="#" class="text-foreground hover:text-primary px-3 py-2 text-sm font-medium">Home</a>
+                            <a href="#" class="text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium">Flights</a>
+                            <a href="#" class="text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium">Trains</a>
+                            <a href="#" class="text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium">Buses</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button data-event="click:showLogin" class="text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium">
+                        Login
+                    </button>
+                    <button data-event="click:showRegister" class="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                        Sign Up
+                    </button>
+                    <!-- User menu (hidden by default, shown when logged in) -->
+                    <div class="hidden relative">
+                        <button class="flex items-center space-x-2 text-muted-foreground hover:text-primary">
+                            <i class="fas fa-user-circle text-lg"></i>
+                            <span data-bind="user.name">John Doe</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: Navigation -->
+
+    <!-- Hero Section -->
+    <!-- @COMPONENT: HeroSearch [main search functionality] -->
+    <section class="hero-gradient relative overflow-hidden">
+        <!-- Modern geometric mountain background -->
+        <div style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&h=1080'); background-size: cover; background-position: center;" class="absolute inset-0 opacity-20"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                    Your Journey Starts Here
+                </h1>
+                <p class="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
+                    Discover amazing destinations with flights, trains, and buses. Book your perfect trip today.
+                </p>
+            </div>
+
+            <!-- Search Form -->
+            <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-5xl mx-auto">
+                <!-- Travel Type Selector -->
+                <div class="flex flex-wrap gap-2 mb-6 p-1 bg-muted rounded-lg">
+                    <button data-event="click:selectTravelType" data-type="flight" class="flex items-center space-x-2 px-6 py-3 bg-primary text-primary-foreground rounded-md font-medium transition-all">
+                        <i class="fas fa-plane"></i>
+                        <span>Flights</span>
+                    </button>
+                    <button data-event="click:selectTravelType" data-type="train" class="flex items-center space-x-2 px-6 py-3 text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-md font-medium transition-all">
+                        <i class="fas fa-train"></i>
+                        <span>Trains</span>
+                    </button>
+                    <button data-event="click:selectTravelType" data-type="bus" class="flex items-center space-x-2 px-6 py-3 text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-md font-medium transition-all">
+                        <i class="fas fa-bus"></i>
+                        <span>Buses</span>
+                    </button>
+                </div>
+
+                <!-- Search Fields -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-muted-foreground">From</label>
+                        <div class="relative">
+                            <i class="fas fa-map-marker-alt absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"></i>
+                            <input type="text" placeholder="Departure city" class="w-full pl-10 pr-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent" data-bind="search.from">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-muted-foreground">To</label>
+                        <div class="relative">
+                            <i class="fas fa-map-marker-alt absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"></i>
+                            <input type="text" placeholder="Destination city" class="w-full pl-10 pr-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent" data-bind="search.to">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-muted-foreground">Departure</label>
+                        <div class="relative">
+                            <i class="fas fa-calendar absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"></i>
+                            <input type="date" class="w-full pl-10 pr-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent" data-bind="search.departureDate">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-muted-foreground">Passengers</label>
+                        <div class="relative">
+                            <i class="fas fa-users absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"></i>
+                            <select class="w-full pl-10 pr-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent appearance-none" data-bind="search.passengers">
+                                <option>1 Passenger</option>
+                                <option>2 Passengers</option>
+                                <option>3 Passengers</option>
+                                <option>4+ Passengers</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Button -->
+                <button data-event="click:performSearch" data-implementation="Should validate form and redirect to results" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-4 rounded-lg text-lg transition-colors">
+                    <i class="fas fa-search mr-2"></i>
+                    Search Travel Options
+                </button>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: HeroSearch -->
+
+    <!-- Travel Options Results -->
+    <!-- @COMPONENT: SearchResults [filterable list of travel options] -->
+    <section class="py-12 bg-muted/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Results Header -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-foreground mb-2">Available Travel Options</h2>
+                    <p class="text-muted-foreground">Found 24 options for New York → Los Angeles on March 15, 2024</p>
+                </div>
+                <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                    <select class="px-4 py-2 border border-border rounded-lg text-sm" data-bind="sortBy">
+                        <option>Sort by Price</option>
+                        <option>Sort by Duration</option>
+                        <option>Sort by Departure Time</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- Filters Sidebar -->
+                <div class="lg:col-span-1">
+                    <div class="bg-card border border-border rounded-lg p-6 sticky top-24">
+                        <h3 class="text-lg font-semibold mb-4">Filters</h3>
+                        
+                        <!-- Travel Type Filter -->
+                        <div class="mb-6">
+                            <h4 class="font-medium text-sm text-muted-foreground mb-3">Travel Type</h4>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" checked class="rounded border-border text-primary focus:ring-ring">
+                                    <span class="ml-2 text-sm">Flights (12)</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-border text-primary focus:ring-ring">
+                                    <span class="ml-2 text-sm">Trains (8)</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-border text-primary focus:ring-ring">
+                                    <span class="ml-2 text-sm">Buses (4)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Price Range -->
+                        <div class="mb-6">
+                            <h4 class="font-medium text-sm text-muted-foreground mb-3">Price Range</h4>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm">$50</span>
+                                    <span class="text-sm">$800</span>
+                                </div>
+                                <input type="range" min="50" max="800" class="w-full">
+                            </div>
+                        </div>
+
+                        <!-- Departure Time -->
+                        <div class="mb-6">
+                            <h4 class="font-medium text-sm text-muted-foreground mb-3">Departure Time</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button class="px-3 py-2 text-xs border border-border rounded hover:bg-accent transition-colors">
+                                    6AM-12PM
+                                </button>
+                                <button class="px-3 py-2 text-xs border border-border rounded hover:bg-accent transition-colors bg-primary text-primary-foreground">
+                                    12PM-6PM
+                                </button>
+                                <button class="px-3 py-2 text-xs border border-border rounded hover:bg-accent transition-colors">
+                                    6PM-12AM
+                                </button>
+                                <button class="px-3 py-2 text-xs border border-border rounded hover:bg-accent transition-colors">
+                                    12AM-6AM
+                                </button>
+                            </div>
+                        </div>
+
+                        <button class="w-full text-sm text-primary hover:underline">Clear all filters</button>
+                    </div>
+                </div>
+
+                <!-- Results List -->
+                <div class="lg:col-span-3 space-y-4">
+                    <!-- @MAP: travelOptions.map(option => ( -->
+                    <!-- Flight Option -->
+                    <div class="bg-card border border-border rounded-lg p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-plane text-primary"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg" data-bind="option.type">Flight</h3>
+                                    <p class="text-sm text-muted-foreground" data-bind="option.airline">Delta Airlines</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-foreground" data-bind="option.price">$299</div>
+                                <div class="text-sm text-muted-foreground">per person</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-clock text-muted-foreground"></i>
+                                <div>
+                                    <div class="font-medium" data-bind="option.departureTime">2:30 PM</div>
+                                    <div class="text-sm text-muted-foreground" data-bind="option.source">New York (JFK)</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="text-sm text-muted-foreground" data-bind="option.duration">5h 30m</div>
+                                    <div class="border-t border-border my-1"></div>
+                                    <div class="text-xs text-muted-foreground">Direct</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3 justify-end">
+                                <div class="text-right">
+                                    <div class="font-medium" data-bind="option.arrivalTime">5:00 PM</div>
+                                    <div class="text-sm text-muted-foreground" data-bind="option.destination">Los Angeles (LAX)</div>
+                                </div>
+                                <i class="fas fa-plane-arrival text-muted-foreground"></i>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-4 border-t border-border">
+                            <div class="flex items-center space-x-4">
+                                <span class="text-sm text-muted-foreground">
+                                    <span data-bind="option.availableSeats">8</span> seats left
+                                </span>
+                                <span class="text-sm text-muted-foreground">•</span>
+                                <span class="text-sm text-muted-foreground">Free cancellation</span>
+                            </div>
+                            <button data-event="click:bookTravel" data-option-id="1" class="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2 rounded-md font-medium transition-colors">
+                                Select
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Train Option -->
+                    <div class="bg-card border border-border rounded-lg p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-train text-green-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg">Train</h3>
+                                    <p class="text-sm text-muted-foreground">Amtrak</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-foreground">$189</div>
+                                <div class="text-sm text-muted-foreground">per person</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-clock text-muted-foreground"></i>
+                                <div>
+                                    <div class="font-medium">8:45 AM</div>
+                                    <div class="text-sm text-muted-foreground">New York Penn</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="text-sm text-muted-foreground">8h 15m</div>
+                                    <div class="border-t border-border my-1"></div>
+                                    <div class="text-xs text-muted-foreground">1 Transfer</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3 justify-end">
+                                <div class="text-right">
+                                    <div class="font-medium">8:00 PM</div>
+                                    <div class="text-sm text-muted-foreground">Los Angeles Union</div>
+                                </div>
+                                <i class="fas fa-train text-muted-foreground"></i>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-4 border-t border-border">
+                            <div class="flex items-center space-x-4">
+                                <span class="text-sm text-muted-foreground">15 seats left</span>
+                                <span class="text-sm text-muted-foreground">•</span>
+                                <span class="text-sm text-muted-foreground">WiFi included</span>
+                            </div>
+                            <button data-event="click:bookTravel" data-option-id="2" class="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2 rounded-md font-medium transition-colors">
+                                Select
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bus Option -->
+                    <div class="bg-card border border-border rounded-lg p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-bus text-orange-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg">Bus</h3>
+                                    <p class="text-sm text-muted-foreground">Greyhound</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-foreground">$89</div>
+                                <div class="text-sm text-muted-foreground">per person</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-clock text-muted-foreground"></i>
+                                <div>
+                                    <div class="font-medium">11:30 PM</div>
+                                    <div class="text-sm text-muted-foreground">Port Authority</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="text-sm text-muted-foreground">12h 45m</div>
+                                    <div class="border-t border-border my-1"></div>
+                                    <div class="text-xs text-muted-foreground">2 Stops</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3 justify-end">
+                                <div class="text-right">
+                                    <div class="font-medium">3:15 PM</div>
+                                    <div class="text-sm text-muted-foreground">LA Downtown</div>
+                                </div>
+                                <i class="fas fa-bus text-muted-foreground"></i>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-4 border-t border-border">
+                            <div class="flex items-center space-x-4">
+                                <span class="text-sm text-muted-foreground">22 seats left</span>
+                                <span class="text-sm text-muted-foreground">•</span>
+                                <span class="text-sm text-muted-foreground">Power outlets</span>
+                            </div>
+                            <button data-event="click:bookTravel" data-option-id="3" class="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2 rounded-md font-medium transition-colors">
+                                Select
+                            </button>
+                        </div>
+                    </div>
+                    <!-- @END_MAP )) -->
+
+                    <!-- Load More Button -->
+                    <div class="text-center pt-8">
+                        <button data-event="click:loadMore" class="px-6 py-3 border border-border rounded-lg text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                            Load More Results
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: SearchResults -->
+
+    <!-- Booking Form Modal (Hidden by default) -->
+    <!-- @COMPONENT: BookingModal [seat selection and passenger details] -->
+    <div class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" data-modal="booking">
+        <div class="bg-card rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-border">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold">Complete Your Booking</h2>
+                    <button data-event="click:closeModal" class="text-muted-foreground hover:text-foreground">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <!-- Booking Progress -->
+                <div class="mt-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">1</div>
+                        <div class="flex-1 h-0.5 bg-primary"></div>
+                        <div class="w-8 h-8 bg-muted text-muted-foreground rounded-full flex items-center justify-center text-sm font-medium">2</div>
+                        <div class="flex-1 h-0.5 bg-muted"></div>
+                        <div class="w-8 h-8 bg-muted text-muted-foreground rounded-full flex items-center justify-center text-sm font-medium">3</div>
+                    </div>
+                    <div class="flex justify-between mt-2 text-sm">
+                        <span class="text-primary font-medium">Passenger Details</span>
+                        <span class="text-muted-foreground">Payment</span>
+                        <span class="text-muted-foreground">Confirmation</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6">
+                <!-- Trip Summary -->
+                <div class="bg-muted/50 rounded-lg p-4 mb-6">
+                    <h3 class="font-semibold mb-3">Trip Summary</h3>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-plane text-primary"></i>
+                            <div>
+                                <div class="font-medium">New York → Los Angeles</div>
+                                <div class="text-sm text-muted-foreground">March 15, 2024 • 2:30 PM - 5:00 PM</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold text-lg">$299</div>
+                            <div class="text-sm text-muted-foreground">per person</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Passenger Information -->
+                <form class="space-y-6">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Passenger Information</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-muted-foreground mb-2">First Name *</label>
+                                <input type="text" required class="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent" data-bind="passenger.firstName">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-muted-foreground mb-2">Last Name *</label>
+                                <input type="text" required class="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent" data-bind="passenger.lastName">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-muted-foreground mb-2">Email *</label>
+                                <input type="email" required class="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent" data-bind="passenger.email">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-muted-foreground mb-2">Phone *</label>
+                                <input type="tel" required class="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent" data-bind="passenger.phone">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seat Selection -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Select Your Seat</h3>
+                        <div class="border border-border rounded-lg p-4">
+                            <div class="text-center mb-4">
+                                <div class="text-sm text-muted-foreground mb-2">Front of Aircraft</div>
+                                <div class="w-full h-2 bg-muted rounded"></div>
+                            </div>
+                            
+                            <!-- Seat Map -->
+                            <div class="space-y-2 max-w-md mx-auto">
+                                <!-- First Class -->
+                                <div class="text-xs text-muted-foreground text-center mb-2">First Class</div>
+                                <div class="grid grid-cols-6 gap-1 mb-4" style="grid-template-columns: 1fr 1fr 0.5fr 1fr 1fr;">
+                                    <!-- @MAP: firstClassSeats.map((seat, index) => ( -->
+                                    <button class="w-8 h-8 border-2 border-green-300 bg-green-50 rounded text-xs font-medium hover:bg-green-100">1A</button>
+                                    <button class="w-8 h-8 border-2 border-green-300 bg-green-50 rounded text-xs font-medium hover:bg-green-100">1B</button>
+                                    <div class="w-4"></div>
+                                    <button class="w-8 h-8 border-2 border-green-300 bg-green-50 rounded text-xs font-medium hover:bg-green-100">1C</button>
+                                    <button class="w-8 h-8 border-2 border-green-300 bg-green-50 rounded text-xs font-medium hover:bg-green-100">1D</button>
+                                    <!-- @END_MAP )) -->
+                                </div>
+
+                                <!-- Economy -->
+                                <div class="text-xs text-muted-foreground text-center mb-2">Economy</div>
+                                <div class="space-y-1">
+                                    <!-- @MAP: economySeats.map((row, rowIndex) => ( -->
+                                    <div class="grid grid-cols-7 gap-1" style="grid-template-columns: 1fr 1fr 1fr 0.5fr 1fr 1fr 1fr;">
+                                        <button class="w-8 h-8 border border-border rounded text-xs hover:bg-accent">15A</button>
+                                        <button class="w-8 h-8 border border-border rounded text-xs hover:bg-accent">15B</button>
+                                        <button class="w-8 h-8 border border-border rounded text-xs hover:bg-accent">15C</button>
+                                        <div class="w-4"></div>
+                                        <button class="w-8 h-8 border border-border rounded text-xs hover:bg-accent">15D</button>
+                                        <button class="w-8 h-8 border border-border rounded text-xs hover:bg-accent">15E</button>
+                                        <button class="w-8 h-8 bg-primary text-primary-foreground border-2 border-primary rounded text-xs">15F</button>
+                                    </div>
+                                    <div class="grid grid-cols-7 gap-1" style="grid-template-columns: 1fr 1fr 1fr 0.5fr 1fr 1fr 1fr;">
+                                        <button class="w-8 h-8 border border-border rounded text-xs hover:bg-accent">16A</button>
+                                        <button class="w-8 h-8 bg-gray-300 text-gray-500 rounded text-xs cursor-not-allowed">16B</button>
+                                        <button class="w-8 h-8 border border-border rounded text-xs hover:bg-accent">16C</button>
+                                        <div class="w-4"></div>
+                                        <button class="w-8 h-8 border border-border rounded text-xs hover:bg-accent">16D</button>
+                                        <button class="w-8 h-8 border border-border rounded text-xs hover:bg-accent">16E</button>
+                                        <button class="w-8 h-8 border border-border rounded text-xs hover:bg-accent">16F</button>
+                                    </div>
+                                    <!-- @END_MAP )) -->
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-center space-x-6 mt-6 text-xs">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-4 h-4 border border-border rounded"></div>
+                                    <span>Available</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-4 h-4 bg-primary rounded"></div>
+                                    <span>Selected</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-4 h-4 bg-gray-300 rounded"></div>
+                                    <span>Occupied</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Options -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Additional Options</h3>
+                        <div class="space-y-3">
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded border-border text-primary focus:ring-ring">
+                                <span class="text-sm">Add travel insurance (+$25)</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded border-border text-primary focus:ring-ring">
+                                <span class="text-sm">Extra baggage allowance (+$50)</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded border-border text-primary focus:ring-ring">
+                                <span class="text-sm">Priority boarding (+$15)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Total and Actions -->
+                    <div class="border-t border-border pt-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <div class="text-sm text-muted-foreground">Total Price</div>
+                                <div class="text-3xl font-bold">$299.00</div>
+                            </div>
+                            <div class="text-right text-sm text-muted-foreground">
+                                <div>Includes taxes and fees</div>
+                                <div>Free cancellation until 24h before</div>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-4">
+                            <button type="button" data-event="click:closeModal" class="flex-1 px-6 py-3 border border-border text-muted-foreground rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors">
+                                Cancel
+                            </button>
+                            <button type="submit" data-event="submit:bookingForm" data-implementation="Should validate form and process booking" class="flex-1 px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-medium transition-colors">
+                                Proceed to Payment
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: BookingModal -->
+
+    <!-- User Dashboard -->
+    <!-- @COMPONENT: UserDashboard [manage bookings and profile] -->
+    <section class="py-12 bg-background">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- Sidebar Navigation -->
+                <div class="lg:col-span-1">
+                    <div class="bg-card border border-border rounded-lg p-6">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-primary text-lg"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold" data-bind="user.name">John Doe</div>
+                                <div class="text-sm text-muted-foreground" data-bind="user.email">john@example.com</div>
+                            </div>
+                        </div>
+                        <nav class="space-y-2">
+                            <a href="#" class="block px-4 py-2 text-sm bg-primary/10 text-primary rounded-lg font-medium">My Bookings</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg">Profile Settings</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg">Payment Methods</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg">Travel Preferences</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg">Logout</a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="lg:col-span-3">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-foreground mb-2">My Bookings</h2>
+                        <p class="text-muted-foreground">Manage your current and past travel bookings</p>
+                    </div>
+
+                    <!-- Booking Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-card border border-border rounded-lg p-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-calendar-check text-primary"></i>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold" data-bind="stats.upcomingTrips">3</div>
+                                    <div class="text-sm text-muted-foreground">Upcoming Trips</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-card border border-border rounded-lg p-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-check-circle text-green-600"></i>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold" data-bind="stats.completedTrips">12</div>
+                                    <div class="text-sm text-muted-foreground">Completed Trips</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-card border border-border rounded-lg p-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-dollar-sign text-orange-600"></i>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold" data-bind="stats.totalSpent">$2,847</div>
+                                    <div class="text-sm text-muted-foreground">Total Spent</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bookings List -->
+                    <div class="space-y-6">
+                        <!-- @MAP: userBookings.map(booking => ( -->
+                        <!-- Upcoming Booking -->
+                        <div class="bg-card border border-border rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-plane text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold" data-bind="booking.route">New York → Los Angeles</div>
+                                        <div class="text-sm text-muted-foreground" data-bind="booking.date">March 15, 2024 • 2:30 PM</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">Confirmed</span>
+                                    <div class="text-right">
+                                        <div class="font-semibold" data-bind="booking.price">$299.00</div>
+                                        <div class="text-sm text-muted-foreground" data-bind="booking.seats">1 passenger</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 text-sm">
+                                <div>
+                                    <span class="text-muted-foreground">Booking ID:</span>
+                                    <span class="font-medium ml-2" data-bind="booking.id">TR-2024-001</span>
+                                </div>
+                                <div>
+                                    <span class="text-muted-foreground">Seat:</span>
+                                    <span class="font-medium ml-2" data-bind="booking.seat">15F</span>
+                                </div>
+                                <div>
+                                    <span class="text-muted-foreground">Airline:</span>
+                                    <span class="font-medium ml-2" data-bind="booking.airline">Delta Airlines</span>
+                                </div>
+                                <div>
+                                    <span class="text-muted-foreground">Flight:</span>
+                                    <span class="font-medium ml-2" data-bind="booking.flightNumber">DL 1234</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between pt-4 border-t border-border">
+                                <div class="flex items-center space-x-4">
+                                    <button data-event="click:viewBookingDetails" data-booking-id="1" class="text-sm text-primary hover:underline">View Details</button>
+                                    <button data-event="click:downloadTicket" data-booking-id="1" class="text-sm text-primary hover:underline">Download Ticket</button>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <button data-event="click:modifyBooking" data-booking-id="1" class="px-4 py-2 border border-border text-sm rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors">
+                                        Modify
+                                    </button>
+                                    <button data-event="click:cancelBooking" data-booking-id="1" data-implementation="Should show confirmation dialog before cancelling" class="px-4 py-2 border border-destructive text-destructive text-sm rounded-lg hover:bg-destructive hover:text-destructive-foreground transition-colors">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Past Booking -->
+                        <div class="bg-card border border-border rounded-lg p-6 opacity-75">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
+                                        <i class="fas fa-train text-muted-foreground"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold">Los Angeles → San Francisco</div>
+                                        <div class="text-sm text-muted-foreground">February 20, 2024 • 9:00 AM</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">Completed</span>
+                                    <div class="text-right">
+                                        <div class="font-semibold">$89.00</div>
+                                        <div class="text-sm text-muted-foreground">1 passenger</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between pt-4 border-t border-border">
+                                <div class="flex items-center space-x-4">
+                                    <button data-event="click:viewBookingDetails" data-booking-id="2" class="text-sm text-primary hover:underline">View Details</button>
+                                    <button data-event="click:bookAgain" data-booking-id="2" class="text-sm text-primary hover:underline">Book Again</button>
+                                </div>
+                                <button data-event="click:rateTrip" data-booking-id="2" class="px-4 py-2 border border-border text-sm rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors">
+                                    Rate Trip
+                                </button>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: UserDashboard -->
+
+    <!-- Registration/Login Forms -->
+    <!-- @COMPONENT: AuthModals [registration and login forms] -->
+    <!-- Login Modal -->
+    <div class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" data-modal="login">
+        <div class="bg-card rounded-lg max-w-md w-full p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Welcome Back</h2>
+                <button data-event="click:closeModal" class="text-muted-foreground hover:text-foreground">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <form class="space-y-4" data-form="login">
+                <div>
+                    <label class="block text-sm font-medium text-muted-foreground mb-2">Email</label>
+                    <input type="email" required class="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent" data-bind="login.email">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-muted-foreground mb-2">Password</label>
+                    <input type="password" required class="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent" data-bind="login.password">
+                </div>
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="rounded border-border text-primary focus:ring-ring">
+                        <span class="ml-2 text-sm text-muted-foreground">Remember me</span>
+                    </label>
+                    <a href="#" class="text-sm text-primary hover:underline">Forgot password?</a>
+                </div>
+                <button type="submit" data-event="submit:loginForm" data-implementation="Should authenticate user and redirect" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3 rounded-lg font-medium transition-colors">
+                    Sign In
+                </button>
+                <div class="text-center">
+                    <span class="text-sm text-muted-foreground">Don't have an account? </span>
+                    <button type="button" data-event="click:switchToRegister" class="text-sm text-primary hover:underline">Sign up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" data-modal="register">
+        <div class="bg-card rounded-lg max-w-md w-full p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Create Account</h2>
+                <button data-event="click:closeModal" class="text-muted-foreground hover:text-foreground">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <form class="space-y-4" data-form="register">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-muted-foreground mb-2">First Name</label>
+                        <input type="text" required class="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent" data-bind="register.firstName">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-muted-foreground mb-2">Last Name</label>
+                        <input type="text" required class="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent" data-bind="register.lastName">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-muted-foreground mb-2">Email</label>
+                    <input type="email" required class="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent" data-bind="register.email">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-muted-foreground mb-2">Phone</label>
+                    <input type="tel" required class="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent" data-bind="register.phone">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-muted-foreground mb-2">Password</label>
+                    <input type="password" required class="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent" data-bind="register.password">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-muted-foreground mb-2">Confirm Password</label>
+                    <input type="password" required class="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent" data-bind="register.confirmPassword">
+                </div>
+                <div class="flex items-start">
+                    <input type="checkbox" required class="rounded border-border text-primary focus:ring-ring mt-1">
+                    <span class="ml-2 text-sm text-muted-foreground">I agree to the <a href="#" class="text-primary hover:underline">Terms of Service</a> and <a href="#" class="text-primary hover:underline">Privacy Policy</a></span>
+                </div>
+                <button type="submit" data-event="submit:registerForm" data-implementation="Should validate passwords match and create account" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3 rounded-lg font-medium transition-colors">
+                    Create Account
+                </button>
+                <div class="text-center">
+                    <span class="text-sm text-muted-foreground">Already have an account? </span>
+                    <button type="button" data-event="click:switchToLogin" class="text-sm text-primary hover:underline">Sign in</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: AuthModals -->
+
+    <!-- Footer -->
+    <footer class="bg-card border-t border-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">
+                        <i class="fas fa-plane-departure mr-2 text-primary"></i>TravelEase
+                    </h3>
+                    <p class="text-muted-foreground mb-4">Making travel booking simple, fast, and reliable. Your journey starts with us.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-muted-foreground hover:text-primary">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-muted-foreground hover:text-primary">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-muted-foreground hover:text-primary">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-medium mb-4">Travel</h4>
+                    <ul class="space-y-2 text-sm text-muted-foreground">
+                        <li><a href="#" class="hover:text-primary">Flights</a></li>
+                        <li><a href="#" class="hover:text-primary">Trains</a></li>
+                        <li><a href="#" class="hover:text-primary">Buses</a></li>
+                        <li><a href="#" class="hover:text-primary">Multi-city</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-medium mb-4">Support</h4>
+                    <ul class="space-y-2 text-sm text-muted-foreground">
+                        <li><a href="#" class="hover:text-primary">Help Center</a></li>
+                        <li><a href="#" class="hover:text-primary">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-primary">Booking Changes</a></li>
+                        <li><a href="#" class="hover:text-primary">Refunds</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-medium mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm text-muted-foreground">
+                        <li><a href="#" class="hover:text-primary">About Us</a></li>
+                        <li><a href="#" class="hover:text-primary">Careers</a></li>
+                        <li><a href="#" class="hover:text-primary">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-primary">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
+                <p>&copy; 2024 TravelEase. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for UI interactions -->
+    <script>
+        (function() {
+            // TODO: Implement proper state management and API integration
+            
+            // Modal management
+            function showModal(modalName) {
+                document.querySelector(`[data-modal="${modalName}"]`).classList.remove('hidden');
+            }
+            
+            function hideModal(modalName) {
+                document.querySelector(`[data-modal="${modalName}"]`).classList.add('hidden');
+            }
+            
+            // Event listeners for modal triggers
+            document.addEventListener('click', function(e) {
+                if (e.target.hasAttribute('data-event')) {
+                    const event = e.target.getAttribute('data-event');
+                    
+                    switch(event) {
+                        case 'click:showLogin':
+                            showModal('login');
+                            break;
+                        case 'click:showRegister':
+                            showModal('register');
+                            break;
+                        case 'click:closeModal':
+                            e.target.closest('[data-modal]').classList.add('hidden');
+                            break;
+                        case 'click:switchToRegister':
+                            hideModal('login');
+                            showModal('register');
+                            break;
+                        case 'click:switchToLogin':
+                            hideModal('register');
+                            showModal('login');
+                            break;
+                        case 'click:bookTravel':
+                            showModal('booking');
+                            break;
+                        // TODO: Implement other event handlers
+                    }
+                }
+            });
+            
+            // Close modals when clicking outside
+            document.addEventListener('click', function(e) {
+                if (e.target.hasAttribute('data-modal')) {
+                    e.target.classList.add('hidden');
+                }
+            });
+            
+            // Prevent modal content clicks from closing modal
+            document.querySelectorAll('[data-modal] > div').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            });
+            
+            // Travel type selection
+            document.querySelectorAll('[data-event="click:selectTravelType"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('[data-event="click:selectTravelType"]').forEach(btn => {
+                        btn.className = btn.className.replace('bg-primary text-primary-foreground', 'text-muted-foreground hover:bg-accent hover:text-accent-foreground');
+                    });
+                    
+                    // Add active class to clicked button
+                    this.className = this.className.replace('text-muted-foreground hover:bg-accent hover:text-accent-foreground', 'bg-primary text-primary-foreground');
+                });
+            });
+            
+            // Form submissions
+            document.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const form = e.target;
+                
+                if (form.hasAttribute('data-form')) {
+                    const formType = form.getAttribute('data-form');
+                    console.log(`Form submitted: ${formType}`);
+                    // TODO: Implement form validation and submission logic
+                }
+            });
+            
+            console.log('TravelEase application initialized');
+        })();
+    </script>
+</body>
+</html>

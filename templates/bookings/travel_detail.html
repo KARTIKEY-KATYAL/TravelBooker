@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ travel_option.source }} to {{ travel_option.destination }} - Travel Booking System{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-{% if travel_option.travel_type == 'flight' %}plane{% elif travel_option.travel_type == 'train' %}train{% else %}bus{% endif %}"></i>
+                        {{ travel_option.get_travel_type_display }} Details
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-5">
+                            <div class="text-center p-3 border rounded">
+                                <h4 class="fw-bold">{{ travel_option.source }}</h4>
+                                <p class="mb-1">{{ travel_option.departure_date }}</p>
+                                <h5 class="text-primary">{{ travel_option.departure_time }}</h5>
+                                <small class="text-muted">Departure</small>
+                            </div>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-center justify-content-center">
+                            <div class="text-center">
+                                <i class="fas fa-arrow-right fa-2x text-muted"></i>
+                                <div class="mt-2">
+                                    <small class="text-muted">{{ travel_option.get_duration }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="text-center p-3 border rounded">
+                                <h4 class="fw-bold">{{ travel_option.destination }}</h4>
+                                <p class="mb-1">{{ travel_option.arrival_date }}</p>
+                                <h5 class="text-primary">{{ travel_option.arrival_time }}</h5>
+                                <small class="text-muted">Arrival</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-info-circle"></i> Travel Information</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Travel ID:</strong> {{ travel_option.travel_id }}</li>
+                                <li><strong>Type:</strong> {{ travel_option.get_travel_type_display }}</li>
+                                <li><strong>Status:</strong> 
+                                    <span class="badge bg-{% if travel_option.status == 'active' %}success{% else %}warning{% endif %}">
+                                        {{ travel_option.get_status_display }}
+                                    </span>
+                                </li>
+                                <li><strong>Total Seats:</strong> {{ travel_option.total_seats }}</li>
+                                <li><strong>Available Seats:</strong> 
+                                    <span class="{% if travel_option.available_seats < 5 %}text-warning{% else %}text-success{% endif %}">
+                                        {{ travel_option.available_seats }}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-dollar-sign"></i> Pricing</h5>
+                            <div class="bg-light p-3 rounded">
+                                <h3 class="text-primary mb-0">${{ travel_option.price }}</h3>
+                                <small class="text-muted">per person</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="card shadow-sm mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Important Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Booking Policy</h6>
+                            <ul class="small">
+                                <li>Booking confirmation is instant</li>
+                                <li>Cancellation allowed before departure date</li>
+                                <li>Refund processed within 5-7 business days</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Travel Tips</h6>
+                            <ul class="small">
+                                <li>Arrive 30 minutes before departure</li>
+                                <li>Carry valid ID proof</li>
+                                <li>Check weather conditions before travel</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Sidebar -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm sticky-top" style="top: 20px;">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-ticket-alt"></i> Book This Travel</h5>
+                </div>
+                <div class="card-body">
+                    {% if travel_option.is_available %}
+                        <div class="text-center mb-3">
+                            <h2 class="text-success">${{ travel_option.price }}</h2>
+                            <p class="text-muted mb-0">per person</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <i class="fas fa-users"></i> {{ travel_option.available_seats }} seats available
+                            </small>
+                        </div>
+
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'bookings:book_travel' travel_option.travel_id %}" class="btn btn-success btn-lg w-100 mb-3">
+                                <i class="fas fa-credit-card"></i> Book Now
+                            </a>
+                        {% else %}
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> Please login to book this travel option.
+                            </div>
+                            <a href="{% url 'accounts:login' %}?next={% url 'bookings:book_travel' travel_option.travel_id %}" class="btn btn-primary w-100 mb-2">
+                                <i class="fas fa-sign-in-alt"></i> Login to Book
+                            </a>
+                            <a href="{% url 'accounts:register' %}" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-user-plus"></i> Create Account
+                            </a>
+                        {% endif %}
+                        
+                        <div class="text-center">
+                            <small class="text-muted">
+                                <i class="fas fa-shield-alt"></i> Secure booking with instant confirmation
+                            </small>
+                        </div>
+                    {% else %}
+                        <div class="text-center">
+                            <i class="fas fa-times-circle fa-3x text-danger mb-3"></i>
+                            <h5 class="text-danger">Not Available</h5>
+                            <p class="text-muted">This travel option is currently not available for booking.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card shadow-sm mt-3">
+                <div class="card-body">
+                    <h6><i class="fas fa-share-alt"></i> Share</h6>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary btn-sm" onclick="shareTravel()">
+                            <i class="fas fa-share"></i> Share this travel option
+                        </button>
+                        <a href="{% url 'bookings:search_results' %}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-search"></i> Find similar options
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function shareTravel() {
+    if (navigator.share) {
+        navigator.share({
+            title: '{{ travel_option.source }} to {{ travel_option.destination }}',
+            text: 'Check out this travel option on TravelBooker',
+            url: window.location.href
+        });
+    } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(window.location.href).then(function() {
+            alert('Link copied to clipboard!');
+        });
+    }
+}
+</script>
+{% endblock %}

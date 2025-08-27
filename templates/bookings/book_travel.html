@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Book Travel - {{ travel_option.source }} to {{ travel_option.destination }}{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Travel Summary -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-plane"></i> Travel Summary</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6 class="fw-bold">{{ travel_option.source }}</h6>
+                            <p class="mb-0">{{ travel_option.departure_date }}</p>
+                            <p class="text-primary">{{ travel_option.departure_time }}</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="fas fa-arrow-right fa-2x text-muted"></i>
+                            <p class="mt-2 mb-0">{{ travel_option.get_travel_type_display }}</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <h6 class="fw-bold">{{ travel_option.destination }}</h6>
+                            <p class="mb-0">{{ travel_option.arrival_date }}</p>
+                            <p class="text-primary">{{ travel_option.arrival_time }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Travel ID:</strong> {{ travel_option.travel_id }}
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <strong>Price per seat:</strong> <span class="text-success">${{ travel_option.price }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Form -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="fas fa-ticket-alt"></i> Booking Details</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="bookingForm">
+                        {% csrf_token %}
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.number_of_seats.id_for_label }}" class="form-label">
+                                    <i class="fas fa-users"></i> Number of Seats
+                                </label>
+                                {{ form.number_of_seats }}
+                                <div class="form-text">Available seats: {{ travel_option.available_seats }}</div>
+                                {% if form.number_of_seats.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.number_of_seats.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-calculator"></i> Total Price
+                                </label>
+                                <div class="form-control bg-light" id="totalPrice">${{ travel_option.price }}</div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+                        
+                        <h5><i class="fas fa-user"></i> Passenger Information</h5>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.passenger_name.id_for_label }}" class="form-label">Full Name</label>
+                                {{ form.passenger_name }}
+                                {% if form.passenger_name.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.passenger_name.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.passenger_email.id_for_label }}" class="form-label">Email Address</label>
+                                {{ form.passenger_email }}
+                                {% if form.passenger_email.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.passenger_email.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.passenger_phone.id_for_label }}" class="form-label">Phone Number</label>
+                                {{ form.passenger_phone }}
+                                {% if form.passenger_phone.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.passenger_phone.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Terms and Conditions -->
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                            <label class="form-check-label" for="termsCheck">
+                                I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a>
+                            </label>
+                        </div>
+
+                        <!-- Booking Summary -->
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-info-circle"></i> Booking Summary</h6>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <strong>Route:</strong> {{ travel_option.source }} → {{ travel_option.destination }}
+                                </div>
+                                <div class="col-sm-6">
+                                    <strong>Date:</strong> {{ travel_option.departure_date }}
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-sm-6">
+                                    <strong>Seats:</strong> <span id="summarySeats">1</span>
+                                </div>
+                                <div class="col-sm-6">
+                                    <strong>Total:</strong> <span id="summaryTotal">${{ travel_option.price }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'bookings:travel_detail' travel_option.travel_id %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-credit-card"></i> Confirm Booking
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Terms and Conditions Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Booking Terms</h6>
+                <ul>
+                    <li>All bookings are subject to availability and confirmation.</li>
+                    <li>Payment is required at the time of booking.</li>
+                    <li>Cancellations are allowed up to the departure date.</li>
+                    <li>Refunds will be processed within 5-7 business days.</li>
+                </ul>
+                <h6>Travel Requirements</h6>
+                <ul>
+                    <li>Passengers must carry valid identification.</li>
+                    <li>Arrive at least 30 minutes before departure.</li>
+                    <li>Children under 12 must be accompanied by an adult.</li>
+                </ul>
+                <h6>Liability</h6>
+                <p>TravelBooker acts as a booking platform and is not liable for delays, cancellations, or other issues caused by travel providers.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const seatsInput = document.getElementById('{{ form.number_of_seats.id_for_label }}');
+    const totalPriceElement = document.getElementById('totalPrice');
+    const summarySeats = document.getElementById('summarySeats');
+    const summaryTotal = document.getElementById('summaryTotal');
+    const pricePerSeat = {{ travel_option.price }};
+
+    function updateTotal() {
+        const seats = parseInt(seatsInput.value) || 1;
+        const total = seats * pricePerSeat;
+        totalPriceElement.textContent = '$' + total.toFixed(2);
+        summarySeats.textContent = seats;
+        summaryTotal.textContent = '$' + total.toFixed(2);
+    }
+
+    seatsInput.addEventListener('input', updateTotal);
+    
+    // Initialize with default value
+    updateTotal();
+});
+</script>
+{% endblock %}

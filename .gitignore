@@ -1,6 +1,54 @@
+# Node.js (legacy from previous project)
 node_modules
 dist
-.DS_Store
-server/public
 vite.config.ts.*
 *.tar.gz
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+!media/.gitkeep
+!staticfiles/.gitkeep
+
+# Virtual Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+*.code-workspace
+.idea/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+Desktop.ini
+Thumbs.db
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Misc
+*.bak
+*.orig
+*.swp
+*.swo
+*~
